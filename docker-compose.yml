@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - openmeetings-db:/var/lib/mysql/data
+  openmeetings:
+    image: apache/openmeetings:${OM_TAG}
+    restart: always
+    ports:
+      - 5443:5443
+      - 8888:8888
+    environment:
+      - OM_DB_HOST=db
+    depends_on:
+      - db
+volumes:
+  openmeetings-db:
